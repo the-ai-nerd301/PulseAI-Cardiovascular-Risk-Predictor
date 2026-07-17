@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pulse-AI | Multi-Model Cardiovascular Intelligence</title>
+    <meta name="description" content="Pulse-AI uses Decision Tree, SVM, and Random Forest models to predict cardiovascular risk with confidence scores and AI consensus voting.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Orbitron:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div class="scroll-progress" id="scroll-progress"></div>
+
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="glow-orb orb-3"></div>
+    <canvas id="particle-canvas"></canvas>
+    <div class="toast" id="toast"></div>
+
+    <nav class="nav" id="nav">
+        <a href="#" class="nav-logo"><span class="pulse-dot"></span> Pulse-AI</a>
+        <ul class="nav-links">
+            <li><a href="#scroll-anim-wrapper" class="nav-link">Intro</a></li>
+            <li><a href="#input-section" class="nav-link">Predict</a></li>
+            <li><a href="#metrics-section" class="nav-link">Metrics</a></li>
+            <li><a href="#scroll-anim-wrapper-about" class="nav-link">About</a></li>
+            <li><a href="#input-section" class="nav-cta">Get Started</a></li>
+        </ul>
+    </nav>
+
+    <!-- INTRO SCROLL ANIMATION -->
+    <section class="scroll-anim-wrapper" id="scroll-anim-wrapper">
+        <div class="scroll-anim-sticky">
+            <canvas id="frame-canvas"></canvas>
+
+            <div class="scroll-anim-loading" id="scroll-anim-loading">
+                <div class="loading-ring"></div>
+                <div class="loading-pct" id="loading-pct">Loading 0%</div>
+            </div>
+
+            <div class="scroll-anim-overlay" id="overlay-intro">
+                <h2>Three Models. One Verdict.</h2>
+                <p>Decision Tree, SVM, and Random Forest analyze every patient in parallel.</p>
+            </div>
+
+            <div class="stream-label dt" id="label-dt">
+                <span class="label-title">Decision Tree</span>
+                <span class="label-desc">Rule‑based classifier</span>
+            </div>
+            <div class="stream-label svm" id="label-svm">
+                <span class="label-title">SVM</span>
+                <span class="label-desc">Maximum‑margin classifier</span>
+            </div>
+            <div class="stream-label rf" id="label-rf">
+                <span class="label-title">Random Forest</span>
+                <span class="label-desc">Ensemble of 100 trees</span>
+            </div>
+
+            <div class="scroll-anim-overlay" id="overlay-outro">
+                <h2>Consensus-Driven Risk Detection</h2>
+                <p>Every prediction is backed by AI agreement, not a single model's guess.</p>
+            </div>
+
+            <div class="scroll-anim-cue" id="scroll-anim-cue">
+                <span>Scroll</span>
+                <span class="cue-arrow"></span>
+            </div>
+
+            <div class="scroll-anim-scrim" id="scrim-intro"></div>
+        </div>
+    </section>
+
+    <section class="hero" id="hero">
+        <div class="hero-badge"><span class="badge-dot"></span> Analysis Engine Online</div>
+        <h1>Predict <span class="highlight">Cardiovascular Risk</span><br>With Multi-Model AI</h1>
+        <p>Pulse-AI leverages <strong>Decision Tree</strong>, <strong>SVM</strong>, and <strong>Random Forest</strong> to analyze patient data. All three models run in parallel, with confidence scores and AI consensus voting.</p>
+        <div class="hero-buttons">
+            <a href="#input-section" class="btn btn-primary">▸ Start Prediction</a>
+            <a href="#metrics-section" class="btn btn-outline">View Model Metrics</a>
+        </div>
+        <div class="ecg-container">
+            <svg viewBox="0 0 500 80" xmlns="http://www.w3.org/2000/svg">
+                <path class="ecg-path" d="M0 40 L60 40 L80 40 L95 10 L110 70 L125 40 L160 40 L180 40 L195 5 L210 75 L225 40 L260 40 L280 40 L295 20 L310 60 L325 40 L360 40 L380 40 L395 8 L410 72 L425 40 L460 40 L500 40" />
+            </svg>
+        </div>
+    </section>
+
+    <!-- INPUT SECTION -->
+    <section class="section reveal" id="input-section">
+        <div class="section-title-wrap">
+            <h2>Enter <span>Patient Data</span></h2>
+            <p>Complete the form below. BMI, pulse pressure, and BP category are calculated automatically.</p>
+        </div>
+        <div class="card">
+            <form id="patient-form" onsubmit="handlePredict(event)">
+                <div class="form-grid">
+                    <div class="form-group"><label>Age (years)</label><input type="number" id="age" placeholder="e.g. 55" min="18" max="100" required></div>
+                    <div class="form-group"><label>Gender</label><select id="gender" required><option value="">Select...</option><option value="male">Male</option><option value="female">Female</option></select></div>
+                    <div class="form-group"><label>Height (cm)</label><input type="number" id="height" placeholder="e.g. 170" min="120" max="220" required></div>
+                    <div class="form-group"><label>Weight (kg)</label><input type="number" id="weight" placeholder="e.g. 75" min="30" max="200" required></div>
+                    <div class="form-group"><label>Systolic BP (mmHg)</label><input type="number" id="ap_hi" placeholder="e.g. 130" min="80" max="220" required></div>
+                    <div class="form-group"><label>Diastolic BP (mmHg)</label><input type="number" id="ap_lo" placeholder="e.g. 85" min="40" max="140" required></div>
+                    <div class="form-group"><label>Cholesterol</label><select id="cholesterol" required><option value="">Select...</option><option value="1">Normal</option><option value="2">Above Normal</option><option value="3">High</option></select></div>
+                    <div class="form-group"><label>Glucose</label><select id="gluc" required><option value="">Select...</option><option value="1">Normal</option><option value="2">Above Normal</option><option value="3">High</option></select></div>
+                    <div class="form-group"><label>Smoking</label><select id="smoke" required><option value="">Select...</option><option value="0">No</option><option value="1">Yes</option></select></div>
+                    <div class="form-group"><label>Alcohol</label><select id="alco" required><option value="">Select...</option><option value="0">No</option><option value="1">Yes</option></select></div>
+                    <div class="form-group"><label>Physical Activity</label><select id="active" required><option value="">Select...</option><option value="1">Active</option><option value="0">Sedentary</option></select></div>
+                    <div class="form-group"><label>Family History of CVD</label><select id="family_history" required><option value="">Select...</option><option value="no">No</option><option value="yes">Yes</option></select></div>
+                </div>
+                <div class="auto-metrics" id="auto-metrics">
+                    <div class="metric-mini"><div class="metric-mini-label">BMI</div><div class="metric-mini-value" id="calc-bmi">--</div></div>
+                    <div class="metric-mini"><div class="metric-mini-label">Pulse Pressure</div><div class="metric-mini-value" id="calc-pp">--</div></div>
+                    <div class="metric-mini"><div class="metric-mini-label">BP Category</div><div class="metric-mini-value" id="calc-bpcat">--</div></div>
+                </div>
+                <div class="form-submit-row">
+                    <button type="submit" class="btn-predict">🔬 Run Multi-Model Analysis</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- RESULTS SECTION -->
+    <section class="section results-section reveal" id="results-section">
+        <div class="section-title-wrap">
+            <h2>Prediction <span>Results</span></h2>
+            <p>All three models analyzed the patient data independently.</p>
+        </div>
+        <div class="results-grid" id="results-grid">
+            <div class="result-card reveal reveal-delay-1" id="card-dt">
+                <div class="model-icon dt">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4-4v-2" />
+                        <path d="M7 21v-2a4 4 0 0 1 4-4h4" />
+                        <circle cx="12" cy="3" r="2" />
+                        <path d="M12 5v4" />
+                    </svg>
+                </div>
+                <h3>Decision Tree</h3>
+                <p class="model-subtitle">Rule-based classifier</p>
+                <div class="confidence-circle">
+                    <svg viewBox="0 0 120 120"><circle class="bg-ring" cx="60" cy="60" r="52"/><circle class="progress-ring" id="ring-dt" cx="60" cy="60" r="52" stroke="#4a90d9" stroke-dasharray="326.73" stroke-dashoffset="326.73"/></svg>
+                    <div class="center-text"><span id="conf-dt">0</span><span class="pct-sign">%</span></div>
+                </div>
+                <span class="risk-badge" id="risk-dt">--</span><div class="demo-tag" id="demo-dt"></div>
+            </div>
+            <div class="result-card reveal reveal-delay-2" id="card-svm">
+                <div class="model-icon svm">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="4" y1="4" x2="20" y2="20" />
+                        <line x1="4" y1="20" x2="20" y2="4" />
+                        <circle cx="8" cy="8" r="1.5" fill="currentColor" stroke="none" />
+                        <circle cx="16" cy="16" r="1.5" fill="currentColor" stroke="none" />
+                    </svg>
+                </div>
+                <h3>SVM</h3>
+                <p class="model-subtitle">Maximum-margin classifier</p>
+                <div class="confidence-circle">
+                    <svg viewBox="0 0 120 120"><circle class="bg-ring" cx="60" cy="60" r="52"/><circle class="progress-ring" id="ring-svm" cx="60" cy="60" r="52" stroke="#7c5ce7" stroke-dasharray="326.73" stroke-dashoffset="326.73"/></svg>
+                    <div class="center-text"><span id="conf-svm">0</span><span class="pct-sign">%</span></div>
+                </div>
+                <span class="risk-badge" id="risk-svm">--</span><div class="demo-tag" id="demo-svm"></div>
+            </div>
+            <div class="result-card reveal reveal-delay-3" id="card-rf">
+                <div class="model-icon rf">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                        <path d="M2 17l10 5 10-5" />
+                        <path d="M2 12l10 5 10-5" />
+                    </svg>
+                </div>
+                <h3>Random Forest</h3>
+                <p class="model-subtitle">Ensemble of 100 trees</p>
+                <div class="confidence-circle">
+                    <svg viewBox="0 0 120 120"><circle class="bg-ring" cx="60" cy="60" r="52"/><circle class="progress-ring" id="ring-rf" cx="60" cy="60" r="52" stroke="#f0a040" stroke-dasharray="326.73" stroke-dashoffset="326.73"/></svg>
+                    <div class="center-text"><span id="conf-rf">0</span><span class="pct-sign">%</span></div>
+                </div>
+                <span class="risk-badge" id="risk-rf">--</span><div class="demo-tag" id="demo-rf"></div>
+            </div>
+        </div>
+        <!-- Consensus Banner -->
+        <div id="consensus-container" style="display:none;">
+            <div class="section-title-wrap" style="margin-top:30px;"><h2>🗳️ <span>AI Consensus</span></h2></div>
+            <div class="consensus-box" id="consensus-box">
+                <div class="consensus-subtitle" id="consensus-votes"></div>
+                <div class="consensus-verdict" id="consensus-verdict"></div>
+                <div class="consensus-subtitle" id="consensus-agreement"></div>
+            </div>
+        </div>
+        <!-- Confidence Comparison Chart -->
+        <div class="card reveal reveal-delay-4" style="margin-top:20px;" id="chart-conf-card">
+            <h4 style="font-family:var(--font-display);margin-bottom:12px;">📈 Confidence Comparison</h4>
+            <canvas id="chart-conf-bar" style="max-height:260px;"></canvas>
+        </div>
+    </section>
+
+    <!-- HEALTH INDICATORS -->
+    <section class="section reveal" id="health-indicators-section" style="display:none;">
+        <div class="section-title-wrap">
+            <h2>
+    <span class="heading-accent"></span>
+    <span>Health Indicators</span>
+</h2>
+            <p>Visual breakdown of key patient metrics.</p>
+        </div>
+        <div class="gauge-grid">
+            <div class="gauge-card"><h4>BMI</h4><canvas id="gauge-bmi"></canvas></div>
+            <div class="gauge-card"><h4>Systolic Blood Pressure</h4><canvas id="gauge-sbp"></canvas></div>
+            <div class="gauge-card"><h4>Cholesterol Level</h4><canvas id="gauge-chol"></canvas></div>
+        </div>
+    </section>
+
+    <!-- AI EXPLANATION -->
+    <section class="section reveal" id="explanation-section" style="display:none;">
+        <div class="section-title-wrap">
+            <h2>
+    <span class="heading-accent"></span>
+    <span>AI Explanation</span>
+</h2>
+            <p>Key factors influencing the risk assessment.</p>
+        </div>
+        <div class="card"><div class="explain-list" id="explain-list"></div></div>
+    </section>
+
+    <!-- PERFORMANCE SCROLL ANIMATION -->
+    <section class="scroll-anim-wrapper" id="scroll-anim-wrapper-perf">
+        <div class="scroll-anim-sticky">
+            <canvas id="frame-canvas-perf"></canvas>
+
+            <div class="scroll-anim-loading" id="scroll-anim-loading-perf">
+                <div class="loading-ring"></div>
+                <div class="loading-pct" id="loading-pct-perf">Loading 0%</div>
+            </div>
+
+            <div class="scroll-anim-overlay" id="overlay-intro-perf">
+                <h2>Model Performance Dashboard</h2>
+                <p>Decision Tree, SVM, Random Forest compared across key metrics.</p>
+            </div>
+
+            <span class="stream-label accuracy" id="label-accuracy">
+                <span class="label-title">Accuracy</span>
+                <span class="label-desc">Overall correctness of predictions</span>
+            </span>
+            <span class="stream-label precision" id="label-precision">
+                <span class="label-title">Precision</span>
+                <span class="label-desc">Positive predictive value</span>
+            </span>
+            <span class="stream-label recall" id="label-recall">
+                <span class="label-title">Recall</span>
+                <span class="label-desc">True positive rate</span>
+            </span>
+
+            <div class="scroll-anim-overlay" id="overlay-outro-perf">
+                <h2>Consensus-Driven Evaluation</h2>
+                <p>All models benchmarked on the same test set for fair comparison.</p>
+            </div>
+
+            <div class="scroll-anim-cue" id="scroll-anim-cue-perf">
+                <span>Scroll</span>
+                <span class="cue-arrow"></span>
+            </div>
+
+            <div class="scroll-anim-scrim" id="scrim-perf"></div>
+        </div>
+    </section>
+
+    <!-- METRICS SECTION -->
+    <section class="section reveal" id="metrics-section">
+        <div class="section-title-wrap">
+            <h2>
+    <span class="heading-accent"></span>
+    <span>Model Performance Dashboard</span>
+</h2>
+            <p>Comprehensive evaluation of all three models.</p>
+        </div>
+        <!-- Per-model mini cards -->
+        <div id="perf-mini-cards"></div>
+        <div class="metrics-grid">
+            <div class="chart-card reveal reveal-delay-1"><h4>📊 Metric Comparison</h4><canvas id="chart-bar"></canvas></div>
+            <div class="chart-card reveal reveal-delay-2"><h4>🎯 ROC Curves (Placeholder)</h4><canvas id="chart-roc"></canvas></div>
+            <div class="chart-card reveal reveal-delay-3" style="grid-column:1/-1;"><h4>🕸️ Radar — Model Profiles</h4><canvas id="chart-radar" style="max-height:340px;"></canvas></div>
+        </div>
+        <div class="card reveal reveal-delay-4" style="margin-top:22px;">
+            <h4 style="font-family:var(--font-display);margin-bottom:12px;">📋 Detailed Metrics Table</h4>
+            <div class="metrics-table-wrap">
+                <table class="metrics-table"><thead><tr><th>Model</th><th>Accuracy</th><th>Precision</th><th>Recall</th><th>F1 Score</th><th>AUC-ROC</th></tr></thead><tbody>
+                    <tr><td><strong>🌳 Decision Tree</strong></td><td>0.86</td><td>0.84</td><td>0.83</td><td>0.835</td><td class="metric-highlight">0.84</td></tr>
+                    <tr><td><strong>🔲 SVM</strong></td><td>0.88</td><td>0.87</td><td>0.85</td><td>0.860</td><td class="metric-highlight">0.90</td></tr>
+                    <tr><td><strong>🌲 Random Forest</strong></td><td>0.91</td><td>0.90</td><td>0.89</td><td>0.895</td><td class="metric-highlight">0.94</td></tr>
+                </tbody></table>
+            </div>
+            <p style="margin-top:10px;font-size:0.78rem;color:var(--text-muted);"><em>📌 Placeholder metrics — replace with your actual evaluation results after training.</em></p>
+        </div>
+    </section>
+
+    <!-- ABOUT SCROLL ANIMATION -->
+    <section class="scroll-anim-wrapper" id="scroll-anim-wrapper-about">
+        <div class="scroll-anim-sticky">
+            <canvas id="frame-canvas-about"></canvas>
+
+            <div class="scroll-anim-loading" id="scroll-anim-loading-about">
+                <div class="loading-ring"></div>
+                <div class="loading-pct" id="loading-pct-about">Loading 0%</div>
+            </div>
+
+            <div class="scroll-anim-overlay" id="overlay-intro-about">
+                <h2>About Pulse‑AI</h2>
+                <p>Bridging machine learning and cardiovascular care.</p>
+            </div>
+
+            <span class="stream-label mission" id="label-mission">
+                <span class="label-title">Our Mission</span>
+                <span class="label-desc">Empower clinicians with transparent, multi‑model risk assessment.</span>
+            </span>
+            <span class="stream-label vision" id="label-vision">
+                <span class="label-title">Our Vision</span>
+                <span class="label-desc">A world where AI‑assisted diagnostics are accessible to everyone.</span>
+            </span>
+
+            <span class="stream-label data-driven" id="label-data-driven">
+                <span class="label-title">Data‑Driven</span>
+                <span class="label-desc">Trained on 70,000 real patient records</span>
+            </span>
+            <span class="stream-label explainable" id="label-explainable">
+                <span class="label-title">Explainable</span>
+                <span class="label-desc">Transparent AI shows key risk factors</span>
+            </span>
+
+            <div class="scroll-anim-overlay" id="overlay-outro-about">
+                <h2>Built with Care</h2>
+                <p>Trained on 70,000 patient records — validated for real‑world reliability.</p>
+            </div>
+
+            <div class="scroll-anim-cue" id="scroll-anim-cue-about">
+                <span>Scroll</span>
+                <span class="cue-arrow"></span>
+            </div>
+
+            <div class="scroll-anim-scrim" id="scrim-about"></div>
+        </div>
+    </section>
+        <!-- THANKS FOR VISITING -->
+    <section class="section reveal" id="thanks-section">
+        <div class="thanks-card">
+            <div class="thanks-pulse"></div>
+            <h2>Thanks for visiting <span class="highlight">Pulse‑AI</span></h2>
+            <p>We hope this multi‑model cardiovascular intelligence platform empowers your decision‑making.</p>
+            <div class="thanks-links">
+                <a href="#input-section" class="btn btn-primary">▸ Try Another Prediction</a>
+                <a href="#scroll-anim-wrapper" class="btn btn-outline">Watch Intro Again</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer reveal">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <a href="#" class="footer-logo">
+                    <span class="pulse-dot"></span> Pulse-AI
+                </a>
+                <p class="footer-tagline">Multi‑Model Cardiovascular Intelligence System</p>
+            </div>
+
+            <div class="footer-links">
+                <a href="#scroll-anim-wrapper">Intro</a>
+                <a href="#input-section">Predict</a>
+                <a href="#metrics-section">Metrics</a>
+                <a href="#scroll-anim-wrapper-about">About</a>
+            </div>
+
+            <div class="footer-social">
+                <a href="https://github.com/the-ai-nerd301/PulseAI-Cardiovascular-Risk-Predictor" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="GitHub Repository">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+                    </svg>
+                </a>
+                <a href="https://www.linkedin.com/in/ai-nerd-241125420/" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="LinkedIn Profile">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" />
+                        <rect x="2" y="9" width="4" height="12" />
+                        <circle cx="4" cy="4" r="2" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Pulse‑AI — Trained on 70,000 cardiovascular patient records. All predictions are for informational purposes only.</p>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.17.1/dist/ort.min.js"></script>
+    <script src="js/scroll-animation.js"></script>
+    <script src="js/predictor.js"></script>
+    <script src="js/metrics.js"></script>
+    <script src="js/scroll-animation-performance.js"></script>
+    <script src="js/scroll-animation-about.js"></script>
+</body>
+</html>
